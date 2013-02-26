@@ -1,0 +1,7 @@
+/app/database/production.sqlite
+/app/database/seeds/UserTableSeeder.php
+/app/config/database.php
+/vendor
+composer.phar
+composer.lock
+.DS_Store
