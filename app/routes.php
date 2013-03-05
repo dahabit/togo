@@ -21,7 +21,7 @@ Route::get('/login', array('before' => 'guest', function()
 	return View::make('login');
 }));
 
-Route::post('/login', function()
+Route::post('/login', array('before' => 'csrf', function()
 {
 	$validator = Validator::make(
 		Input::all(),
@@ -47,7 +47,7 @@ Route::post('/login', function()
 	}
 
 	return Redirect::to('/');
-});
+}));
 
 Route::get('/logout', function()
 {
@@ -61,7 +61,7 @@ Route::get('/register', array('before' => 'guest', function()
 	return View::make('register');
 }));
 
-Route::post('/register', array('before' => 'guest', function()
+Route::post('/register', array('before' => 'guest|csrf', function()
 {
 	$validator = Validator::make(
 		Input::all(),
@@ -99,7 +99,7 @@ Route::get('/profile', array('before' => 'auth', function()
 	return View::make('profile');
 }));
 
-Route::post('/profile', array('before' => 'auth', function()
+Route::post('/profile', array('before' => 'auth|csrf', function()
 {
 	$rules = array(
 			'email' => 'required|email|unique:users,email,' . Auth::user()->id,
@@ -151,3 +151,44 @@ Route::group(array('prefix' => 'api/v1', 'before' => 'api_auth'), function()
 {
 	Route::resource('task', 'ApiTaskController');
 });
+
+Route::get('/password/remind', array('before' => 'guest', function() {
+    return View::make('password_remind');
+  }));
+
+Route::post('/password/remind', array('before' => 'guest|csrf', function() {
+    $credentials = array(
+      'email' => Input::get('email')
+    );
+
+    return Password::remind($credentials, function($m){
+        $m->subject('Togo - Password Reset');
+      });
+  }));
+
+Route::get('/password/reset/{token}', array('before' => 'guest', function($token) {
+    return View::make('password_reset')->with('token', $token);
+  }));
+
+Route::post('/password/reset/{token}', array('before' => 'guest|csrf', function() {
+    $rules = array(
+      'email' => 'required',
+      'password' => 'required|between:6,255|confirmed'
+    );
+
+    $validator = Validator::make(Input::all(),$rules);
+
+    if($validator->fails())
+      Redirect::to('/password/reset/' . $token)->withErrors();
+
+    $credentials = array(
+      'email' => Input::get('email'),
+      'password' => Input::get('password')
+    );
+
+    return Password::reset($credentials, function($user, $password) {
+        $user->password = Hash::make($password);
+        $user->save();
+        return Redirect::to('login');
+      });
+  }));

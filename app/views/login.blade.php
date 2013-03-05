@@ -57,9 +57,11 @@
 				<div class="control-group">
 					<div class="controls">
 						<button type="submit" class="btn btn-large btn-primary">Login</button>
-						<span class="help-inline"><a href="/register">Create a new account?</a></span>
+						<span class="help-inline"><a href="/password/remind">Forgot your password?</a></span>
 					</div>
 				</div>
+        
+        <input type="hidden" name="csrf_token" value="{{{ csrf_token() }}}">
 			</fieldset>
 		</form>
 	</div>

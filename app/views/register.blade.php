@@ -72,6 +72,8 @@
 						<span class="help-inline"><a href="/login">Already have an account?</a></span>
 					</div>
 				</div>
+
+        <input type="hidden" name="csrf_token" value="{{{ csrf_token() }}}">
 			</fieldset>
 		</form>
 	</div>

@@ -36,6 +36,10 @@
 	</head>
 
 	<body>
+		<a href="https://github.com/alanly/togo">
+			<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub">
+		</a>
+
 		<div class="container">
 			<div class="row-fluid pull-close">
 				<h1 class="brand pull-left"><a href="/">Togo.</a></h1>
@@ -54,6 +58,8 @@
 				<p class="muted pull-left"><small>&copy; Togo.</small></p>
 				@if ( Auth::check() )
 					<p class="foot-nav pull-right"><small><a href="/profile">Profile</a> &nbsp; <a href="/logout">Logout</a></small></p>
+        @else
+          <p class="foot-nav pull-right"><small><a href="/register">Create an account?</a></small></p>
 				@endif
 			</div>
 		</div>
